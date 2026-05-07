@@ -1,39 +1,32 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\BarangController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\PeminjamanController;
-use App\Http\Controllers\ModulPraktikumController;
+use App\Http\Controllers\BarangController;
 
 Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('dashboard');
-    }
-    return redirect()->route('login');
+    return auth()->check() ? redirect()->route('user.dashboard') : redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    
+    // User Menu (Prefix 'user')
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
+        Route::get('/barang', [UserController::class, 'barang'])->name('barang');
+        Route::get('/ketersediaan', [UserController::class, 'ketersediaan'])->name('ketersediaan');
+        Route::get('/pinjam', [UserController::class, 'pinjam'])->name('pinjam');
+        Route::get('/riwayat', [UserController::class, 'riwayat'])->name('riwayat');
+        Route::post('/logout', [UserController::class, 'logout'])->name('logout');
+    });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Mahasiswa & Admin can view and borrow
-    Route::get('/barang', [BarangController::class, 'index'])->name('barang.index');
-    Route::get('/modul', [ModulPraktikumController::class, 'index'])->name('modul.index');
-    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
-    Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
+    // Peminjaman Logic
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
-
-    // Admin, Koor Lab, Asisten can manage
+    
+    // Admin & Staff Area
     Route::middleware(['role:admin,koor_lab,asisten'])->group(function () {
         Route::resource('barang', BarangController::class)->except(['index']);
-        Route::resource('modul', ModulPraktikumController::class)->except(['index']);
         Route::patch('/peminjaman/{id}/status', [PeminjamanController::class, 'updateStatus'])->name('peminjaman.updateStatus');
     });
 });

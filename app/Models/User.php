@@ -13,21 +13,16 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'id_user';
+   protected $primaryKey = 'id_user'; // Beritahu Laravel nama PK-nya
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'nama',
-        'npm',
-        'jurusan',
-        'prodi',
-        'email',
-        'password',
-        'role',
+    'nama',
+    'npm',
+    'jurusan',
+    'prodi',
+    'email',
+    'password',
+    'role',
     ];
 
     /**
