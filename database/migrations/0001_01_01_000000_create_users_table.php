@@ -1,3 +1,4 @@
+-- Active: 1778052595891@@127.0.0.1@3306@simalab_db
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -14,13 +15,13 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id('id_user'); // Primary Key
             $table->string('nama');
-            $table->string('npm')->unique();
+            $table->string('npm')->nullable()->unique();
             $table->string('jurusan')->nullable();
             $table->string('prodi')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'koor_lab', 'asisten', 'mahasiswa'])->default('mahasiswa');
+            $table->enum('role', ['admin', 'koordinator_lab', 'asisten', 'mahasiswa'])->default('mahasiswa');
             $table->rememberToken();
             $table->timestamps();
         });

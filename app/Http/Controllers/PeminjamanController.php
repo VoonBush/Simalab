@@ -96,7 +96,7 @@ class PeminjamanController extends Controller
             $peminjaman->save();
 
             DB::commit();
-            return redirect()->route('peminjaman.index')->with('success', 'Status peminjaman diperbarui.');
+            return back()->with('success', 'Status peminjaman diperbarui.');
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', $e->getMessage());

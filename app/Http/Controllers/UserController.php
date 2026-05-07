@@ -15,7 +15,7 @@ class UserController extends Controller
     // Gunakan $user->id_user karena itu nama kolom di migrasi Anda
     $totalPinjam = Peminjaman::where('id_user', $user->id_user)->count();
     $totalProses = Peminjaman::where('id_user', $user->id_user)
-                    ->where('status_peminjaman', 'pending')
+                    ->where('status', 'diajukan')
                     ->count();
     
     $peminjamans = Peminjaman::with('details.barang')
@@ -64,11 +64,11 @@ class UserController extends Controller
     public function riwayat(Request $request)
     {
         $status = $request->get('status', 'semua');
-        $statusList = ['pending', 'disetujui', 'dipinjam', 'dikembalikan', 'ditolak'];
+        $statusList = ['diajukan', 'disetujui', 'dikembalikan', 'ditolak'];
         
         $query = Peminjaman::with('details.barang')->where('id_user', Auth::id());
         if ($status !== 'semua') {
-            $query->where('status_peminjaman', $status);
+            $query->where('status', $status);
         }
         
         $peminjamans = $query->latest()->paginate(10);

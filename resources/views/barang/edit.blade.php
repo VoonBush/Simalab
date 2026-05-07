@@ -1,69 +1,65 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Barang Lab') }}
-        </h2>
-    </x-slot>
+@extends('layouts.admin')
+@section('title', 'Edit Barang — InventarisLab')
+@section('page-title', 'Edit Data Barang')
+@section('page-subtitle', 'Perbarui informasi barang inventaris')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <form method="POST" action="{{ route('barang.update', $barang) }}">
-                        @csrf
-                        @method('PUT')
-                        
-                        <div class="mb-4">
-                            <x-input-label for="kode_barang" :value="__('Kode Barang')" />
-                            <x-text-input id="kode_barang" class="block mt-1 w-full bg-gray-100" type="text" name="kode_barang" :value="old('kode_barang', $barang->kode_barang)" readonly />
-                            <p class="text-sm text-gray-500 mt-1">Kode barang tidak dapat diubah.</p>
-                        </div>
+@section('content')
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <form method="POST" action="{{ route('barang.update', $barang) }}" class="p-8">
+            @csrf
+            @method('PUT')
+            
+            <div class="grid grid-cols-1 gap-6">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Kode Barang</label>
+                    <input type="text" value="{{ $barang->kode_barang }}" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-100 bg-slate-50 text-slate-500 cursor-not-allowed">
+                    <p class="mt-1 text-[10px] text-slate-400">Kode barang tidak dapat diubah untuk menjaga integritas data.</p>
+                </div>
 
-                        <div class="mb-4">
-                            <x-input-label for="nama_barang" :value="__('Nama Barang')" />
-                            <x-text-input id="nama_barang" class="block mt-1 w-full" type="text" name="nama_barang" :value="old('nama_barang', $barang->nama_barang)" required />
-                            <x-input-error :messages="$errors->get('nama_barang')" class="mt-2" />
-                        </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Nama Barang</label>
+                    <input type="text" name="nama_barang" value="{{ old('nama_barang', $barang->nama_barang) }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                    @error('nama_barang') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                </div>
 
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="mb-4">
-                                <x-input-label for="stok_total" :value="__('Stok Total')" />
-                                <x-text-input id="stok_total" class="block mt-1 w-full" type="number" min="0" name="stok_total" :value="old('stok_total', $barang->stok_total)" required />
-                                <x-input-error :messages="$errors->get('stok_total')" class="mt-2" />
-                            </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Stok Total</label>
+                        <input type="number" name="stok_total" min="0" value="{{ old('stok_total', $barang->stok_total) }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        @error('stok_total') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Stok Tersedia</label>
+                        <input type="number" name="stok_tersedia" min="0" value="{{ old('stok_tersedia', $barang->stok_tersedia) }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        @error('stok_tersedia') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
+                </div>
 
-                            <div class="mb-4">
-                                <x-input-label for="stok_tersedia" :value="__('Stok Tersedia')" />
-                                <x-text-input id="stok_tersedia" class="block mt-1 w-full" type="number" min="0" name="stok_tersedia" :value="old('stok_tersedia', $barang->stok_tersedia)" required />
-                                <x-input-error :messages="$errors->get('stok_tersedia')" class="mt-2" />
-                            </div>
-                        </div>
-
-                        <div class="mb-4">
-                            <x-input-label for="lokasi" :value="__('Lokasi Penyimpanan')" />
-                            <x-text-input id="lokasi" class="block mt-1 w-full" type="text" name="lokasi" :value="old('lokasi', $barang->lokasi)" required />
-                            <x-input-error :messages="$errors->get('lokasi')" class="mt-2" />
-                        </div>
-
-                        <div class="mb-4">
-                            <x-input-label for="kondisi" :value="__('Kondisi')" />
-                            <select id="kondisi" name="kondisi" class="block mt-1 w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                <option value="Normal" {{ old('kondisi', $barang->kondisi) === 'Normal' ? 'selected' : '' }}>Normal</option>
-                                <option value="Rusak" {{ old('kondisi', $barang->kondisi) === 'Rusak' ? 'selected' : '' }}>Rusak</option>
-                                <option value="Error" {{ old('kondisi', $barang->kondisi) === 'Error' ? 'selected' : '' }}>Error</option>
-                            </select>
-                            <x-input-error :messages="$errors->get('kondisi')" class="mt-2" />
-                        </div>
-
-                        <div class="flex items-center justify-end mt-4">
-                            <a href="{{ route('barang.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-black uppercase tracking-widest hover:bg-gray-400 mr-2">Batal</a>
-                            <x-primary-button>
-                                {{ __('Perbarui') }}
-                            </x-primary-button>
-                        </div>
-                    </form>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Kondisi</label>
+                        <select name="kondisi" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                            <option value="Normal" {{ old('kondisi', $barang->kondisi) == 'Normal' ? 'selected' : '' }}>Normal</option>
+                            <option value="Rusak" {{ old('kondisi', $barang->kondisi) == 'Rusak' ? 'selected' : '' }}>Rusak</option>
+                            <option value="Error" {{ old('kondisi', $barang->kondisi) == 'Error' ? 'selected' : '' }}>Error</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Lokasi</label>
+                        <input type="text" name="lokasi" value="{{ old('lokasi', $barang->lokasi) }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
+                        @error('lokasi') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
+                    </div>
                 </div>
             </div>
-        </div>
+
+            <div class="mt-8 flex items-center justify-end gap-3">
+                <a href="{{ route('barang.index') }}" class="px-6 py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:bg-slate-50 transition-all">Batal</a>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-500/20 transition-all">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
     </div>
-</x-app-layout>
+</div>
+@endsection

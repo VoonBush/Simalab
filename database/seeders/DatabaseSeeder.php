@@ -17,9 +17,14 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        User::create([
+            'nama' => 'Admin',
+            'npm' => null, // Assuming admin doesn't need npm
+            'jurusan' => null,
+            'prodi' => null,
+            'email' => 'admin@simalab.com',
+            'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+            'role' => 'Admin',
         ]);
     }
 }
