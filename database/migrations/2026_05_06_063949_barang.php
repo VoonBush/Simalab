@@ -6,28 +6,26 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('barang', function (Blueprint $table) {
-        $table->id('id_barang'); // Primary Key
-        $table->string('kode_barang')->unique();
-        $table->string('nama_barang');
-        $table->integer('stok_total');
-        $table->integer('stok_tersedia');
-        $table->string('lokasi');
-        $table->enum('kondisi', ['Normal', 'Rusak', 'Error'])->default('Normal');
-        $table->timestamps();
-});
+        Schema::create('items', function (Blueprint $table) {
+            $table->id();
+            $table->string('code')->unique();            // Kode unik barang, e.g. "ITM-001"
+            $table->string('name');                      // Nama barang
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();         // Path gambar
+            $table->string('qr_code')->nullable();       // Path file QR Code
+            $table->foreignId('location_id')->nullable()->constrained('locations')->nullOnDelete();
+            $table->enum('condition', ['baik', 'rusak', 'perbaikan'])->default('baik');
+            $table->integer('total_stock')->default(1);
+            $table->integer('available_stock')->default(1);
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('items');
     }
 };

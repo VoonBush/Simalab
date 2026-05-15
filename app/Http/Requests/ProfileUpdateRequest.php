@@ -18,16 +18,18 @@ class ProfileUpdateRequest extends FormRequest
     {
         return [
             'nama' => ['required', 'string', 'max:255'],
-            'npm' => ['required', 'string', 'max:50', Rule::unique(User::class)->ignore($this->user()->id_user, 'id_user')],
+            'npm' => ['required', 'string', 'max:50', Rule::unique(User::class)->ignore($this->user()->id ?? $this->user()->id_user, $this->user()->getKeyName())],
             'jurusan' => ['nullable', 'string', 'max:255'],
             'prodi' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
             'email' => [
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
-                Rule::unique(User::class)->ignore($this->user()->id_user, 'id_user'),
+                Rule::unique(User::class)->ignore($this->user()->id ?? $this->user()->id_user, $this->user()->getKeyName()),
             ],
         ];
     }

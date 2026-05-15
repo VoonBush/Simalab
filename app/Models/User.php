@@ -2,49 +2,71 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
-
-   protected $primaryKey = 'id_user'; // Beritahu Laravel nama PK-nya
+    use HasFactory, Notifiable, HasRoles;
 
     protected $fillable = [
-    'nama',
-    'npm',
-    'jurusan',
-    'prodi',
-    'email',
-    'password',
-    'role',
+        'name',
+        'npm',
+        'jurusan',
+        'prodi',
+        'email',
+        'password',
+        'avatar',
+        'phone',
+        'status',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password'          => 'hashed',
         ];
+    }
+
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
+
+    public function approvedBorrowings()
+    {
+        return $this->hasMany(Borrowing::class, 'approved_by');
+    }
+
+    public function modules()
+    {
+        return $this->hasMany(Module::class, 'created_by');
+    }
+
+    public function getAvatarUrlAttribute(): string
+    {
+        return $this->avatar
+            ? asset('storage/' . $this->avatar)
+            : 'https://ui-avatars.com/api/?name=' . urlencode($this->name) . '&background=3b82f6&color=fff&size=128';
+    }
+
+    public function getRoleDisplayAttribute(): string
+    {
+        $map = [
+            'mahasiswa'    => 'Mahasiswa',
+            'asisten_lab'  => 'Asisten Lab',
+            'plp'          => 'PLP',
+            'koordinator'  => 'Koordinator Lab',
+        ];
+        $roleName = $this->getRoleNames()->first() ?? 'mahasiswa';
+        return $map[$roleName] ?? ucfirst($roleName);
     }
 }

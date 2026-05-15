@@ -42,11 +42,12 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-slate-600">{{ $barang->lokasi }}</td>
                     <td class="px-6 py-4">
-                        <span class="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider
-                            @if($barang->kondisi == 'Normal') bg-emerald-100 text-emerald-700
-                            @elseif($barang->kondisi == 'Rusak') bg-red-100 text-red-700
-                            @else bg-amber-100 text-amber-700
-                            @endif">
+                        <span @class([
+                            'px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider',
+                            'bg-emerald-100 text-emerald-700' => $barang->kondisi == 'Normal',
+                            'bg-red-100 text-red-700' => $barang->kondisi == 'Rusak',
+                            'bg-amber-100 text-amber-700' => !in_array($barang->kondisi, ['Normal', 'Rusak']),
+                        ])>
                             {{ $barang->kondisi }}
                         </span>
                     </td>

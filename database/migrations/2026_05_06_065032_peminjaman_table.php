@@ -6,27 +6,37 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('peminjaman', function (Blueprint $table) {
-            $table->id('id_peminjaman');
-            $table->foreignId('id_user')->constrained('users', 'id_user')->onDelete('cascade');
-            $table->dateTime('tanggal_pinjam');
-            $table->dateTime('batas_peminjaman');
-            $table->dateTime('tanggal_kembali')->nullable();
-            $table->enum('status', ['diajukan', 'disetujui', 'ditolak', 'dikembalikan'])->default('diajukan');
+        Schema::create('borrowings', function (Blueprint $table) {
+            $table->id();
+            $table->string('borrow_code')->unique();           // Format: BRW-YYYYMMDD-XXX
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
+            $table->integer('quantity')->default(1);
+            $table->date('borrow_date');
+            $table->date('return_date');                       // Rencana kembali
+            $table->date('actual_return_date')->nullable();    // Aktual kembali
+            $table->text('purpose');                           // Keperluan peminjaman
+            $table->enum('status', [
+                'pending',
+                'approved',
+                'rejected',
+                'borrowed',
+                'returned',
+                'late',
+            ])->default('pending');
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('approved_at')->nullable();
+            $table->text('rejection_reason')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('borrowings');
     }
 };

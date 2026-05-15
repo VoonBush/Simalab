@@ -1,4 +1,3 @@
--- Active: 1778052595891@@127.0.0.1@3306@simalab_db
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -7,21 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id('id_user'); // Primary Key
-            $table->string('nama');
+            $table->id();
+            $table->string('name');
             $table->string('npm')->nullable()->unique();
             $table->string('jurusan')->nullable();
             $table->string('prodi')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role', ['admin', 'koordinator_lab', 'asisten', 'mahasiswa'])->default('mahasiswa');
+            $table->string('avatar')->nullable();
+            $table->string('phone')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -42,9 +40,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

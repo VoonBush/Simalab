@@ -6,25 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
-        Schema::create('modul_praktikums', function (Blueprint $table) {
-            $table->id('id_modul');
-            $table->string('judul');
-            $table->text('deskripsi')->nullable();
-            $table->string('file_path')->nullable();
+        Schema::create('modules', function (Blueprint $table) {
+            $table->id();
+            $table->string('title');
+            $table->string('slug')->unique();
+            $table->text('description')->nullable();
+            $table->string('file_path')->nullable();      // Path PDF/DOCX
+            $table->string('cover_image')->nullable();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->boolean('is_published')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('modul_praktikums');
+        Schema::dropIfExists('modules');
     }
 };

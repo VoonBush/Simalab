@@ -1,59 +1,104 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SIMALAB (Sistem Manajemen Inventaris Lab)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+SIMALAB adalah sebuah sistem informasi berbasis web yang dibangun menggunakan **Laravel 11** untuk mengelola inventaris laboratorium (khususnya Lab Teknik Digital). Sistem ini dirancang untuk memudahkan staf lab, asisten, koordinator, dan mahasiswa dalam mengelola, meminjam, serta memantau barang dan peralatan yang ada di dalam laboratorium.
 
-## About Laravel
+## 🚀 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Manajemen Inventaris:** Pencatatan dan pengelolaan barang lab dengan mendetail (Kondisi, Lokasi, dsb).
+- **Role-Based Access Control (RBAC):** Menggunakan paket **Spatie Permission** untuk mengatur hak akses pengguna yang terdiri dari beberapa role:
+  - `Admin`
+  - `Koordinator`
+  - `PLP` (Pranata Laboratorium Pendidikan)
+  - `Asisten`
+  - `Mahasiswa`
+- **Real-Time Notifications:** Dilengkapi dengan fitur notifikasi secara real-time menggunakan **Laravel Reverb** dan **Livewire**.
+- **Dashboard Admin:** Dashboard khusus untuk Admin dan Koordinator Lab dalam mengelola peran pengguna (User Roles) dan inventaris.
+- **Katalog Barang:** Antarmuka katalog untuk melihat daftar inventaris lab yang tersedia.
+- **UI/UX Modern:** Antarmuka responsif yang dibangun menggunakan **Tailwind CSS** dan komponen-komponen pendukung lainnya (TALL stack).
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Teknologi yang Digunakan (Tech Stack)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Aplikasi ini menggunakan **TALL Stack** beserta teknologi pendukung lainnya:
 
-## Learning Laravel
+- **Framework PHP:** [Laravel 11](https://laravel.com)
+- **Frontend Framework / Styling:** [Tailwind CSS](https://tailwindcss.com) via Vite
+- **Reactivity & Components:** [Livewire](https://livewire.laravel.com/) & Alpine.js
+- **Role & Permission Management:** [Spatie Laravel Permission](https://spatie.be/docs/laravel-permission/v6/introduction)
+- **WebSockets / Real-Time:** Laravel Reverb & Laravel Echo
+- **Database:** MySQL
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## ⚙️ Persyaratan Sistem (Prerequisites)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sebelum menjalankan project ini secara lokal, pastikan Anda telah menginstal:
+- PHP >= 8.2
+- Composer
+- Node.js & NPM
+- MySQL / MariaDB Database
 
-## Laravel Sponsors
+## 💻 Cara Instalasi dan Menjalankan Project
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Ikuti langkah-langkah di bawah ini untuk menjalankan SIMALAB di environment lokal:
 
-### Premium Partners
+1. **Clone repository ini:**
+   ```bash
+   git clone <url-repo-anda>
+   cd SIMALAB_Baru/Simalab
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. **Install dependency PHP (Composer):**
+   ```bash
+   composer install
+   ```
 
-## Contributing
+3. **Install dependency NPM (Node.js):**
+   ```bash
+   npm install
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. **Konfigurasi Environment:**
+   Salin file `.env.example` menjadi `.env` dan atur konfigurasi database Anda.
+   ```bash
+   cp .env.example .env
+   ```
+   *Buka file `.env` dan sesuaikan bagian `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` sesuai dengan konfigurasi lokal Anda.*
 
-## Code of Conduct
+5. **Generate Application Key:**
+   ```bash
+   php artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+6. **Migrasi Database dan Seeding (Dummy Data):**
+   Jalankan migrasi untuk membuat tabel dan jalankan seeder untuk memasukkan data awal termasuk role dan dummy user:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-## Security Vulnerabilities
+7. **Compile Asset Frontend:**
+   Jalankan Vite untuk melakukan build pada asset Tailwind CSS dan JavaScript:
+   ```bash
+   npm run dev
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. **Jalankan Laravel Development Server:**
+   Buka terminal baru dan jalankan server PHP:
+   ```bash
+   php artisan serve
+   ```
+   Aplikasi akan berjalan di `http://localhost:8000`.
 
-## License
+9. **(Opsional) Jalankan WebSocket untuk Notifikasi Real-time:**
+   Jika ingin menggunakan fitur real-time Laravel Reverb, pastikan Reverb sedang berjalan:
+   ```bash
+   php artisan reverb:start
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 👥 Hak Akses (Roles)
+
+Secara default (melalui Seeder), sistem memiliki beberapa tingkatan user:
+1. **Admin/Koordinator:** Memiliki akses penuh ke sistem termasuk manajemen user (role assignments) dan manajemen inventaris.
+2. **PLP / Asisten:** Memiliki akses untuk mengelola data barang dan inventaris.
+3. **Mahasiswa:** Memiliki akses terbatas, umumnya untuk melihat katalog atau meminjam barang.
+
+---
+
+*Dikembangkan untuk keperluan manajemen inventaris Lab Teknik Digital.*

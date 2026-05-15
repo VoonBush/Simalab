@@ -2,48 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Borrowing;
+use App\Models\Item;
+use App\Models\Module;
 use App\Models\User;
-use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
     public function dashboard()
     {
-        $totalBarang = \App\Models\Barang::count();
-        $totalPeminjaman = Peminjaman::count();
-        $pendingPeminjaman = Peminjaman::where('status', 'diajukan')->count();
-        
-        // Fetch all peminjaman requests, showing latest first
-        $peminjamans = Peminjaman::with(['user', 'details.barang'])->latest()->paginate(10);
-        
-        return view('admin.dashboard', compact('totalBarang', 'totalPeminjaman', 'pendingPeminjaman', 'peminjamans'));
+        $stats = [
+            'total_items'       => Item::count(),
+            'available_items'   => Item::where('available_stock', '>', 0)->count(),
+            'pending_borrowings'=> Borrowing::where('status', 'pending')->count(),
+            'active_borrowings' => Borrowing::whereIn('status', ['approved', 'borrowed'])->sum('quantity'),
+            'total_users'       => User::count(),
+            'total_modules'     => Module::where('is_published', true)->count(),
+        ];
+
+        $recentBorrowings = Borrowing::with(['user', 'item'])
+            ->latest()
+            ->take(10)
+            ->get();
+
+        $pendingBorrowings = Borrowing::with(['user', 'item'])
+            ->where('status', 'pending')
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('admin.dashboard', compact('stats', 'recentBorrowings', 'pendingBorrowings'));
     }
 
-    public function users()
+    public function users(Request $request)
     {
-        // View accessible by admin and koor_lab
-        if (!in_array(auth()->user()->role, ['admin', 'koordinator_lab'])) {
-            abort(403, 'Unauthorized action.');
-        }
+        abort_unless(auth()->user()->hasRole(['plp', 'koordinator']), 403);
 
-        $users = User::where('id_user', '!=', auth()->id())->get();
-        return view('admin.users', compact('users'));
+        $users = User::with('roles')
+            ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")
+                ->orWhere('email', 'like', "%{$request->search}%")
+                ->orWhere('npm', 'like', "%{$request->search}%"))
+            ->latest()
+            ->paginate(15);
+
+        $roles = \Spatie\Permission\Models\Role::all();
+
+        return view('admin.users', compact('users', 'roles'));
     }
 
     public function updateRole(Request $request, User $user)
     {
-        // Only admin and koor_lab can update roles
-        if (!in_array(auth()->user()->role, ['admin', 'koordinator_lab'])) {
-            abort(403, 'Unauthorized action.');
-        }
+        abort_unless(auth()->user()->hasRole(['plp', 'koordinator']), 403);
 
-        $request->validate([
-            'role' => 'required|in:admin,koordinator_lab,asisten,mahasiswa'
-        ]);
+        $request->validate(['role' => 'required|exists:roles,name']);
 
-        $user->update(['role' => $request->role]);
+        $user->syncRoles([$request->role]);
 
-        return redirect()->back()->with('success', 'Role pengguna berhasil diperbarui.');
+        return back()->with('success', "Role {$user->name} berhasil diubah menjadi {$request->role}.");
     }
 }

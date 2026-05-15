@@ -19,7 +19,7 @@ class RoleMiddleware
             return redirect('login');
         }
 
-        if (in_array(auth()->user()->role, $roles)) {
+        if (auth()->user()->hasAnyRole($roles)) {
             return $next($request);
         }
 
