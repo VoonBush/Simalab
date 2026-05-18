@@ -61,7 +61,7 @@
                         <td class="px-6 py-4 text-right">
                             <form action="{{ route('admin.users.updateRole', $user) }}" method="POST" class="flex items-center justify-end gap-2">
                                 @csrf @method('PATCH')
-                                <select name="role" class="text-xs border-gray-200 rounded-lg py-1 px-2 bg-white focus:ring-blue-500">
+                                <select name="role" class="text-xs border-gray-200 rounded-lg py-1 px-8 bg-white focus:ring-blue-500">
                                     @foreach($roles as $role)
                                         <option value="{{ $role->name }}" {{ $user->hasRole($role->name) ? 'selected' : '' }}>
                                             {{ ucfirst(str_replace('_', ' ', $role->name)) }}

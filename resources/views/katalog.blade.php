@@ -22,7 +22,7 @@
             </div>
 
             <select name="condition"
-                    class="px-4 py-2.5 text-sm border border-gray-200 rounded-xl bg-white
+                    class="px-7 py-2.5 text-sm border border-gray-200 rounded-xl bg-white
                            focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400">
                 <option value="">Semua Kondisi</option>
                 <option value="baik" {{ request('condition') === 'baik' ? 'selected' : '' }}>Baik</option>
