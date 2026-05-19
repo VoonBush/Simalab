@@ -22,7 +22,7 @@
                 </div>
 
                 {{-- Aksi Cepat untuk Staff --}}
-                @role('asisten_lab|plp|koordinator')
+                @role('asisten_lab|pj')
                 <div class="flex items-center gap-2">
                     @if($borrowing->status === 'pending')
                     <form action="{{ route('borrowings.approve', $borrowing) }}" method="POST">
@@ -64,13 +64,17 @@
 
                     <div>
                         <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Barang yang Dipinjam</h3>
-                        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                            <img src="{{ $borrowing->item->image_url }}" class="w-16 h-16 rounded-xl object-cover" alt="">
-                            <div>
-                                <p class="text-base font-bold text-gray-800">{{ $borrowing->item->name }}</p>
-                                <p class="text-xs text-gray-500">Jumlah: <span class="font-bold text-blue-600">{{ $borrowing->quantity }} unit</span></p>
-                                <p class="text-xs text-gray-500">Lokasi: {{ $borrowing->item->location?->full_name ?? '-' }}</p>
+                        <div class="space-y-3">
+                            @foreach($borrowing->details as $detail)
+                            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                                <img src="{{ $detail->item->image_url }}" class="w-12 h-12 rounded-xl object-cover" alt="">
+                                <div>
+                                    <p class="text-sm font-bold text-gray-800">{{ $detail->item->name }}</p>
+                                    <p class="text-xs text-gray-500">Jumlah: <span class="font-bold text-blue-600">{{ $detail->quantity }} unit</span></p>
+                                    <p class="text-[10px] text-gray-400">Lokasi: {{ $detail->item->location?->full_name ?? '-' }}</p>
+                                </div>
                             </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

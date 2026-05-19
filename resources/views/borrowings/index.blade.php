@@ -54,8 +54,17 @@
                         </td>
                         @endunless
                         <td class="px-6 py-4">
-                            <div class="font-medium text-gray-900">{{ $b->item->name }}</div>
-                            <div class="text-[10px] text-gray-400">Qty: {{ $b->quantity }}</div>
+                            <div class="font-medium text-gray-900">
+                                @if($b->details->count() > 0)
+                                    {{ $b->details->first()->item->name }}
+                                    @if($b->details->count() > 1)
+                                        <span class="text-xs text-blue-500 font-semibold">+ {{ $b->details->count() - 1 }} Barang Lain</span>
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </div>
+                            <div class="text-[10px] text-gray-400">Total: {{ $b->details->sum('quantity') }} unit</div>
                         </td>
                         <td class="px-6 py-4 text-gray-600">
                             {{ $b->borrow_date->format('d M Y') }}

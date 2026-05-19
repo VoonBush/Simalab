@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 // Channel untuk notifikasi real-time Asisten Lab
 Broadcast::channel('lab-assistants', function ($user) {
-    return $user->hasRole(['asisten_lab', 'plp', 'koordinator']);
+    return $user->hasRole(['asisten_lab', 'pj']);
 });
 
 // Channel pribadi per-user

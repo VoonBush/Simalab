@@ -124,7 +124,16 @@
                                     <span class="text-gray-800 font-medium truncate max-w-[120px]">{{ $b->user->name }}</span>
                                 </div>
                             </td>
-                            <td class="py-3 text-gray-600 truncate max-w-[120px]">{{ $b->item->name }}</td>
+                            <td class="py-3 text-gray-600 truncate max-w-[120px]">
+                                @if($b->details->count() > 0)
+                                    {{ $b->details->first()->item->name }}
+                                    @if($b->details->count() > 1)
+                                        <span class="text-[10px] text-blue-500 font-semibold">+ {{ $b->details->count() - 1 }} Lainnya</span>
+                                    @endif
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td class="py-3">
                                 @php $badge = $b->status_badge; @endphp
                                 <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium

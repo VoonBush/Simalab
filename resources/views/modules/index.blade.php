@@ -10,7 +10,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 class="text-xl font-bold text-gray-800 ">Daftar Modul Praktikum</h2>
 
-        @role('asisten_lab|plp|koordinator')
+        @role('asisten_lab|pj')
         <a href="{{ route('modules.create') }}"
            class="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-95 transition-all">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +53,7 @@
                         <span class="text-[10px] text-gray-400 font-medium truncate max-w-[80px]">{{ $m->author->name }}</span>
                     </div>
 
-                    @role('asisten_lab|plp|koordinator')
+                    @role('asisten_lab|pj')
                     <form action="{{ route('modules.destroy', $m) }}" method="POST" onsubmit="return confirm('Hapus modul ini?')">
                         @csrf @method('DELETE')
                         <button type="submit" class="text-gray-300 hover:text-red-500 transition-colors">

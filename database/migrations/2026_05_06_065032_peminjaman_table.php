@@ -12,8 +12,6 @@ return new class extends Migration
             $table->id();
             $table->string('borrow_code')->unique();           // Format: BRW-YYYYMMDD-XXX
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
-            $table->integer('quantity')->default(1);
             $table->date('borrow_date');
             $table->date('return_date');                       // Rencana kembali
             $table->date('actual_return_date')->nullable();    // Aktual kembali

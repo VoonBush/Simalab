@@ -12,8 +12,6 @@ class Borrowing extends Model
     protected $fillable = [
         'borrow_code',
         'user_id',
-        'item_id',
-        'quantity',
         'borrow_date',
         'return_date',
         'actual_return_date',
@@ -37,9 +35,9 @@ class Borrowing extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function item()
+    public function details()
     {
-        return $this->belongsTo(Item::class);
+        return $this->hasMany(BorrowingDetail::class);
     }
 
     public function approver()

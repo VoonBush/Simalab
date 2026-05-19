@@ -26,14 +26,15 @@ class Item extends Model
         return $this->belongsTo(Location::class);
     }
 
-    public function borrowings()
+    public function borrowingDetails()
     {
-        return $this->hasMany(Borrowing::class);
+        return $this->hasMany(BorrowingDetail::class);
     }
 
     public function activeBorrowings()
     {
-        return $this->hasMany(Borrowing::class)->whereIn('status', ['approved', 'borrowed']);
+        return $this->hasManyThrough(Borrowing::class, BorrowingDetail::class, 'item_id', 'id', 'id', 'borrowing_id')
+            ->whereIn('status', ['approved', 'borrowed']);
     }
 
     public function getImageUrlAttribute(): string

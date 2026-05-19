@@ -63,8 +63,7 @@ class User extends Authenticatable
         $map = [
             'mahasiswa'    => 'Mahasiswa',
             'asisten_lab'  => 'Asisten Lab',
-            'plp'          => 'PLP',
-            'koordinator'  => 'Koordinator Lab',
+            'pj'           => 'Penanggung Jawab',
         ];
         $roleName = $this->getRoleNames()->first() ?? 'mahasiswa';
         return $map[$roleName] ?? ucfirst($roleName);

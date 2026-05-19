@@ -21,7 +21,7 @@ class ModuleController extends Controller
 
     public function show(Module $module)
     {
-        abort_unless($module->is_published || auth()->user()->hasRole(['asisten_lab', 'plp', 'koordinator']), 403);
+        abort_unless($module->is_published || auth()->user()->hasRole(['asisten_lab', 'pj']), 403);
         return view('modules.show', compact('module'));
     }
 

@@ -23,7 +23,7 @@ class AssistantNotifications extends Component
 
     public function loadPendingBorrowings(): void
     {
-        $this->notifications = Borrowing::with(['user', 'item'])
+        $this->notifications = Borrowing::with(['user', 'details.item'])
             ->where('status', 'pending')
             ->latest()
             ->take(15)
@@ -33,9 +33,9 @@ class AssistantNotifications extends Component
                 'borrow_code'  => $b->borrow_code,
                 'student_name' => $b->user->name,
                 'student_npm'  => $b->user->npm ?? '-',
-                'item_name'    => $b->item->name,
-                'item_code'    => $b->item->code,
-                'quantity'     => $b->quantity,
+                'item_name'    => $b->details->count() > 0 ? $b->details->first()->item->name . ($b->details->count() > 1 ? ' (+'.($b->details->count()-1).' lainnya)' : '') : '-',
+                'item_code'    => $b->details->count() > 0 ? $b->details->first()->item->code : '-',
+                'quantity'     => $b->details->sum('quantity'),
                 'purpose'      => $b->purpose,
                 'borrow_date'  => $b->borrow_date->format('d/m/Y'),
                 'return_date'  => $b->return_date->format('d/m/Y'),
@@ -96,7 +96,9 @@ class AssistantNotifications extends Component
         ]);
 
         $borrowing = Borrowing::findOrFail($borrowingId);
-        $borrowing->item->increment('available_stock', $borrowing->quantity);
+        foreach ($borrowing->details as $detail) {
+            $detail->item->increment('available_stock', $detail->quantity);
+        }
         $borrowing->update([
             'status' => 'rejected',
             'rejection_reason' => $this->rejectionReason,

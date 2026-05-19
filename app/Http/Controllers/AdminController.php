@@ -16,17 +16,19 @@ class AdminController extends Controller
             'total_items'       => Item::count(),
             'available_items'   => Item::where('available_stock', '>', 0)->count(),
             'pending_borrowings'=> Borrowing::where('status', 'pending')->count(),
-            'active_borrowings' => Borrowing::whereIn('status', ['approved', 'borrowed'])->sum('quantity'),
+            'active_borrowings' => \App\Models\BorrowingDetail::whereHas('borrowing', function($query) {
+                $query->whereIn('status', ['approved', 'borrowed']);
+            })->sum('quantity'),
             'total_users'       => User::count(),
             'total_modules'     => Module::where('is_published', true)->count(),
         ];
 
-        $recentBorrowings = Borrowing::with(['user', 'item'])
+        $recentBorrowings = Borrowing::with(['user', 'details.item'])
             ->latest()
             ->take(10)
             ->get();
 
-        $pendingBorrowings = Borrowing::with(['user', 'item'])
+        $pendingBorrowings = Borrowing::with(['user', 'details.item'])
             ->where('status', 'pending')
             ->latest()
             ->take(5)
@@ -37,7 +39,7 @@ class AdminController extends Controller
 
     public function users(Request $request)
     {
-        abort_unless(auth()->user()->hasRole(['plp', 'koordinator']), 403);
+        abort_unless(auth()->user()->hasRole(['pj']), 403);
 
         $users = User::with('roles')
             ->when($request->search, fn($q) => $q->where('name', 'like', "%{$request->search}%")
@@ -53,7 +55,7 @@ class AdminController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
-        abort_unless(auth()->user()->hasRole(['plp', 'koordinator']), 403);
+        abort_unless(auth()->user()->hasRole(['pj']), 403);
 
         $request->validate(['role' => 'required|exists:roles,name']);
 

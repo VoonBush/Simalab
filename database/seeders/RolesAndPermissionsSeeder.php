@@ -47,30 +47,20 @@ class RolesAndPermissionsSeeder extends Seeder
             'view modules', 'create modules', 'edit modules',
         ]);
 
-        // Role: PLP (Pranata Laboratorium Pendidikan)
-        $plp = Role::firstOrCreate(['name' => 'plp']);
-        $plp->syncPermissions([
-            'view items', 'create items', 'edit items', 'delete items',
-            'view borrowings', 'approve borrowings', 'manage borrowings',
-            'view modules', 'create modules', 'edit modules', 'delete modules',
-            'view users', 'manage users',
-            'manage locations',
-        ]);
+        // Role: PJ (Penanggung Jawab - replaces PLP and Koordinator)
+        $pj = Role::firstOrCreate(['name' => 'pj']);
+        $pj->syncPermissions(Permission::all());
 
-        // Role: Koordinator Lab (All permissions)
-        $koordinator = Role::firstOrCreate(['name' => 'koordinator']);
-        $koordinator->syncPermissions(Permission::all());
-
-        // Create default admin user
+        // Create default PJ user
         $admin = User::firstOrCreate(
-            ['email' => 'admin@simalab.ac.id'],
+            ['email' => 'pj@simalab.ac.id'],
             [
-                'name'     => 'Administrator SIMALAB',
+                'name'     => 'Penanggung Jawab SIMALAB',
                 'password' => bcrypt('password123'),
                 'status'   => 'active',
             ]
         );
-        $admin->assignRole('koordinator');
+        $admin->assignRole('pj');
 
         // Create sample asisten
         $asisten_user = User::firstOrCreate(
@@ -98,16 +88,7 @@ class RolesAndPermissionsSeeder extends Seeder
         );
         $mhs->assignRole('mahasiswa');
 
-        // Create sample PLP
-        $plp_user = User::firstOrCreate(
-            ['email' => 'plp@simalab.ac.id'],
-            [
-                'name'     => 'PLP Demo',
-                'password' => bcrypt('password123'),
-                'status'   => 'active',
-            ]
-        );
-        $plp_user->assignRole('plp');
+
 
         $this->command->info('✅ Roles, permissions, and demo users created successfully!');
     }

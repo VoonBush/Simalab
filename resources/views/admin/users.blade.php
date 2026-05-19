@@ -48,9 +48,8 @@
                         <td class="px-6 py-4">
                             @php
                                 $roleClass = match($user->getRoleNames()->first()) {
-                                    'koordinator' => 'badge-blue',
-                                    'plp' => 'badge-success',
-                                    'asisten_lab' => 'badge-warning',
+                                    'asisten_lab' => 'bg-yellow-100 text-yellow-700',
+                                    'pj'          => 'bg-purple-100 text-purple-700',
                                     default => 'badge-gray',
                                 };
                             @endphp

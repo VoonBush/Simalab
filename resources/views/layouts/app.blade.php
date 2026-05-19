@@ -42,7 +42,7 @@
 
             @php $role = auth()->user()?->getRoleNames()->first() ?? 'mahasiswa'; @endphp
 
-            @if(in_array($role, ['asisten_lab', 'plp', 'koordinator']))
+            @if(in_array($role, ['asisten_lab', 'pj']))
                 {{-- Staff Navigation --}}
                 <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" icon="dashboard">
                     Dashboard
@@ -56,7 +56,7 @@
                 <x-nav-link :href="route('modules.index')" :active="request()->routeIs('modules.*')" icon="module">
                     Modul Praktikum
                 </x-nav-link>
-                @if(in_array($role, ['plp', 'koordinator']))
+                @if(in_array($role, ['pj']))
                 <x-nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')" icon="users">
                     Manajemen User
                 </x-nav-link>
@@ -124,7 +124,7 @@
 
                 <div class="flex items-center gap-3 ml-auto">
                     {{-- Notification Bell (Asisten only) --}}
-                    @role('asisten_lab|plp|koordinator')
+                    @role('asisten_lab|pj')
                         @livewire('assistant-notifications')
                     @endrole
                 </div>

@@ -13,7 +13,7 @@
     {{-- Welcome Card --}}
     <div class="bg-white rounded-2xl shadow-sm p-6 border border-slate-200">
         <h2 class="text-2xl font-bold text-slate-800">
-            Selamat datang, {{ Auth::user()->name }} 👋
+            Selamat datang, {{ Auth::user()->name }}
         </h2>
 
         <p class="text-slate-500 mt-2">
@@ -63,7 +63,7 @@
 
             <a href="{{ route('peminjaman.index') }}"
                class="inline-block mt-4 text-green-600 font-semibold hover:underline">
-                Buka Menu →
+                Buka Menu
             </a>
         </div>
 

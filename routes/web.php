@@ -11,7 +11,7 @@ Route::get('/', function () {
     if (!auth()->check()) return redirect()->route('login');
 
     $user = auth()->user();
-    if ($user->hasRole(['asisten_lab', 'plp', 'koordinator'])) {
+    if ($user->hasRole(['asisten_lab', 'pj'])) {
         return redirect()->route('admin.dashboard');
     }
     return redirect()->route('katalog');
@@ -34,22 +34,22 @@ Route::middleware(['auth'])->group(function () {
 
     Route::patch('/borrowings/{borrowing}/approve', [BorrowingController::class, 'approve'])
         ->name('borrowings.approve')
-        ->middleware('role:asisten_lab|plp|koordinator');
+        ->middleware('role:asisten_lab|pj');
 
     Route::patch('/borrowings/{borrowing}/reject', [BorrowingController::class, 'reject'])
         ->name('borrowings.reject')
-        ->middleware('role:asisten_lab|plp|koordinator');
+        ->middleware('role:asisten_lab|pj');
 
     Route::patch('/borrowings/{borrowing}/returned', [BorrowingController::class, 'markReturned'])
         ->name('borrowings.returned')
-        ->middleware('role:asisten_lab|plp|koordinator');
+        ->middleware('role:asisten_lab|pj');
 
     // Modules
     Route::resource('modules', ModuleController::class)
         ->only(['index', 'show', 'create', 'store', 'destroy']);
 
     // ─── Admin / Staff Area ───────────────────────────────────────
-    Route::middleware(['role:asisten_lab|plp|koordinator'])
+    Route::middleware(['role:asisten_lab|pj'])
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {

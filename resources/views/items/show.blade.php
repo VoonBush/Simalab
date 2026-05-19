@@ -73,7 +73,7 @@
                     </button>
                     @endif
 
-                    @role('asisten_lab|plp|koordinator')
+                    @role('asisten_lab|pj')
                     <a href="{{ route('admin.items.edit', $item) }}"
                        class="px-6 py-3 bg-white text-gray-700 text-sm font-bold rounded-xl border border-gray-200 hover:bg-gray-50 transition-all">
                         Edit
@@ -85,7 +85,7 @@
     </div>
 
     {{-- RIWAYAT PEMINJAMAN (Hanya Staff) --}}
-    @role('asisten_lab|plp|koordinator')
+    @role('asisten_lab|pj')
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <h3 class="text-lg font-bold text-gray-800 mb-4">Riwayat Peminjaman</h3>
         <div class="overflow-x-auto">
