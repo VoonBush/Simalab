@@ -38,6 +38,9 @@
                         <th class="px-6 py-4 font-semibold text-gray-700">Tgl Pinjam</th>
                         <th class="px-6 py-4 font-semibold text-gray-700">Batas Kembali</th>
                         <th class="px-6 py-4 font-semibold text-gray-700">Status</th>
+                        @unless(auth()->user()->hasRole('mahasiswa'))
+                        <th class="px-6 py-4 font-semibold text-gray-700">Penyetuju</th>
+                        @endunless
                         <th class="px-6 py-4 font-semibold text-gray-700 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -78,6 +81,16 @@
                                 {{ $badge['label'] }}
                             </span>
                         </td>
+                        @unless(auth()->user()->hasRole('mahasiswa'))
+                        <td class="px-6 py-4">
+                            @if($b->approved_by)
+                                <div class="font-medium text-gray-900">{{ $b->approver->name }}</div>
+                                <div class="text-[10px] text-gray-400">{{ $b->approved_at?->format('d M Y, H:i') }}</div>
+                            @else
+                                <span class="text-xs text-gray-400">-</span>
+                            @endif
+                        </td>
+                        @endunless
                         <td class="px-6 py-4 text-right">
                             <a href="{{ route('borrowings.show', $b) }}"
                                class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 text-blue-600 text-xs font-bold rounded-lg hover:bg-blue-100 transition-all">

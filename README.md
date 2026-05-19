@@ -6,9 +6,7 @@ SIMALAB adalah sebuah sistem informasi berbasis web yang dibangun menggunakan **
 
 - **Manajemen Inventaris:** Pencatatan dan pengelolaan barang lab dengan mendetail (Kondisi, Lokasi, dsb).
 - **Role-Based Access Control (RBAC):** Menggunakan paket **Spatie Permission** untuk mengatur hak akses pengguna yang terdiri dari beberapa role:
-  - `Admin`
-  - `Koordinator`
-  - `PLP` (Pranata Laboratorium Pendidikan)
+  - 'PJ Lab'
   - `Asisten`
   - `Mahasiswa`
 - **Real-Time Notifications:** Dilengkapi dengan fitur notifikasi secara real-time menggunakan **Laravel Reverb** dan **Livewire**.
