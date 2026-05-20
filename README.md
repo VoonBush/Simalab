@@ -6,11 +6,10 @@ SIMALAB adalah sebuah sistem informasi berbasis web yang dibangun menggunakan **
 
 - **Manajemen Inventaris:** Pencatatan dan pengelolaan barang lab dengan mendetail (Kondisi, Lokasi, dsb).
 - **Role-Based Access Control (RBAC):** Menggunakan paket **Spatie Permission** untuk mengatur hak akses pengguna yang terdiri dari beberapa role:
-  - 'PJ Lab'
+  - `PJ Lab`
   - `Asisten`
   - `Mahasiswa`
 - **Real-Time Notifications:** Dilengkapi dengan fitur notifikasi secara real-time menggunakan **Laravel Reverb** dan **Livewire**.
-- **Dashboard Admin:** Dashboard khusus untuk Admin dan Koordinator Lab dalam mengelola peran pengguna (User Roles) dan inventaris.
 - **Katalog Barang:** Antarmuka katalog untuk melihat daftar inventaris lab yang tersedia.
 - **UI/UX Modern:** Antarmuka responsif yang dibangun menggunakan **Tailwind CSS** dan komponen-komponen pendukung lainnya (TALL stack).
 
